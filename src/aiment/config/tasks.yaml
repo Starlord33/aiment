@@ -1,0 +1,54 @@
+
+# config/tasks.yaml
+initial_assessment_task:
+  description: >
+    Conduct a comprehensive initial assessment of the student. Review their profile,
+    academic history, interests, goals, and analyze their emotional state through
+    their responses.
+  expected_output: >
+    A detailed assessment report including academic standing, emotional state,
+    interests, goals, and any identified concerns that need attention.
+  agent: mentor
+
+academic_planning_task:
+  description: >
+    Based on the initial assessment, create a personalized academic and career
+    development plan that aligns with the student's goals and capabilities.
+  expected_output: >
+    A structured academic plan including course recommendations, study strategies,
+    project suggestions, and career development milestones.
+  agent: academic_advisor
+  context: [initial_assessment_task]
+
+well_being_task:
+  description: >
+    Analyze the student's emotional well-being and mental health indicators from
+    their interactions and responses. Identify any patterns requiring attention.
+  expected_output: >
+    A well-being assessment report with emotional analysis, stress evaluation,
+    and specific recommendations for support.
+  agent: counselor
+  context: [initial_assessment_task]
+  human_input: true
+
+progress_monitoring_task:
+  description: >
+    Track and analyze the student's progress in academic performance, skill
+    development, and emotional well-being against established goals.
+  expected_output: >
+    A comprehensive progress report with metrics, achievements, areas for
+    improvement, and recommended adjustments to existing plans.
+  agent: mentor
+  context: [academic_planning_task, well_being_task]
+
+continuous_monitoring_task:
+  description: >
+    Continuously monitor student progress, safety concerns, and overall well-being.
+    Compile all analyses into a final comprehensive report.
+  expected_output: >
+    A detailed monitoring report including academic progress, safety status,
+    emotional well-being, and any recommendations for immediate action.
+  agent: counselor
+  context: [initial_assessment_task, academic_planning_task, well_being_task, progress_monitoring_task]
+  async_execution: true
+  output_file: 'student_reports/monitoring_report.md'

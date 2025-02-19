@@ -1,0 +1,24 @@
+{
+    "interests": [
+        "Computer Science",
+        "Data Analytics"
+    ],
+    "skills": [
+        "Python",
+        "Statistics"
+    ],
+    "interaction_text": "The student is focused, with a moderate stress level and high engagement and motivation. Their sentiment score is 0.75, indicating a positive outlook.",
+    "sentiment_analysis": {
+        "primary_emotion": "focused",
+        "sentiment_score": 0.75,
+        "emotional_state": {
+            "stress_level": "moderate",
+            "engagement": "high",
+            "motivation": "positive"
+        },
+        "concern_flags": [],
+        "confidence": 0.85,
+        "context": "None"
+    },
+    "safety_assessment": true
+}
