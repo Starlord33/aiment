@@ -20,5 +20,7 @@
         "confidence": 0.85,
         "context": "None"
     },
-    "safety_assessment": true
+    "safety_assessment": true,
+    "name": "John Doe",
+    "grade": 85
 }

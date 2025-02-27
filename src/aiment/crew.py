@@ -1,15 +1,18 @@
-# crew.py
+# src/aiment/crew.py
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from .tools.custom_tool import (
-    EmotionAnalysisTool,
-    StudentDataTool,
-    SafetyAssessmentTool,
-    AcademicProgressTool,
-    CareerGuidanceTool,
-    StudyPatternAnalysisTool,
-    ResourceRecommendationTool
-)
+from aiment.tools.custom_tool import *
+
+# Create a function that returns an instance of your tool
+def create_emotion_analysis_tool():
+    return EmotionAnalysisTool()
+
+# This is the critical part - add this dictionary
+tool_functions = {
+    'EmotionAnalysisTool': create_emotion_analysis_tool
+}
+
+
 
 @CrewBase
 class Aiment():
@@ -21,15 +24,28 @@ class Aiment():
     @agent
     def mentor(self) -> Agent:
         return Agent(
-            config=self.agents_config['mentor'],
+        config=self.agents_config['mentor'],
+        tools=[
+            EmotionAnalysisTool(),
+            StudentDataTool(),
+            SafetyAssessmentTool(),
+            AcademicProgressTool(),
+            CareerGuidanceTool(),
+            StudyPatternAnalysisTool(),
+            ResourceRecommendationTool()
+        ],
+        llm=os.getenv("MODEL", "ollama/llama3.2"),  # Add this line
+    )
+    @agent 
+    def academic_advisor(self) -> Agent:
+        return Agent(
+            config=self.agents_config['academic_advisor'],
             tools=[
-                EmotionAnalysisTool(),
-                StudentDataTool(),
-                SafetyAssessmentTool(),
                 AcademicProgressTool(),
-                CareerGuidanceTool()
-            ],
-            verbose=True
+                StudentDataTool(),
+                CareerGuidanceTool(),
+                ResourceRecommendationTool()
+            ]
         )
 
     @agent
@@ -41,52 +57,28 @@ class Aiment():
                 SafetyAssessmentTool(),
                 StudentDataTool(),
                 StudyPatternAnalysisTool()
-            ],
-            verbose=True
-        )
-
-    @agent
-    def academic_advisor(self) -> Agent:
-        return Agent(
-            config=self.agents_config['academic_advisor'],
-            tools=[
-                AcademicProgressTool(),
-                StudentDataTool(),
-                CareerGuidanceTool(),
-                ResourceRecommendationTool()
-            ],
-            verbose=True
+            ]
         )
 
     @task
-    def initial_assessment_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['initial_assessment_task']
-        )
+    def initial_assessment(self) -> Task:
+        return Task(config=self.tasks_config['initial_assessment'])
 
     @task
-    def academic_planning_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['academic_planning_task']
-        )
+    def academic_planning(self) -> Task:
+        return Task(config=self.tasks_config['academic_planning'])
+        
+    @task
+    def well_being_assessment(self) -> Task:
+        return Task(config=self.tasks_config['well_being_assessment'])
 
     @task
-    def well_being_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['well_being_task']
-        )
+    def progress_monitoring(self) -> Task:
+        return Task(config=self.tasks_config['progress_monitoring'])
 
     @task
-    def progress_monitoring_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['progress_monitoring_task']
-        )
-
-    @task
-    def continuous_monitoring_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['continuous_monitoring_task']
-        )
+    def emergency_response(self) -> Task:
+        return Task(config=self.tasks_config['emergency_response'])
 
     @crew
     def crew(self) -> Crew:

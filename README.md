@@ -20,7 +20,7 @@ crewai install
 ```
 ### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+<!-- **Add your `OPENAI_API_KEY` into the `.env` file** -->
 
 - Modify `src/aiment/config/agents.yaml` to define your agents
 - Modify `src/aiment/config/tasks.yaml` to define your tasks

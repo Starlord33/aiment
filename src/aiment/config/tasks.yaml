@@ -1,54 +1,114 @@
-
-# config/tasks.yaml
-initial_assessment_task:
+initial_assessment:
   description: >
-    Conduct a comprehensive initial assessment of the student. Review their profile,
-    academic history, interests, goals, and analyze their emotional state through
-    their responses.
+    Conduct an initial assessment of the student based on their profile and interactions. 
+    Student ID: {student_id}
+    Year: {year}
+    Major: {major}
+    Current GPA: {gpa}
+    Input: {input}
+    
+    Consider their academic background, interests, challenges, and emotional state.
+    Identify any immediate concerns or areas that need attention.
+    Provide a comprehensive assessment report that covers academic performance, 
+    well-being, career alignment, and recommended support strategies.
   expected_output: >
-    A detailed assessment report including academic standing, emotional state,
-    interests, goals, and any identified concerns that need attention.
+    A comprehensive initial assessment report including:
+    1. Student profile summary
+    2. Academic analysis (performance, study patterns, strengths, and areas for improvement)
+    3. Well-being assessment
+    4. Career alignment evaluation
+    5. Recommended support strategies
+    6. Suggested follow-up actions
   agent: mentor
+  output_file: "student_reports/{student_id}/initial_assessment.md"
 
-academic_planning_task:
+academic_planning:
   description: >
-    Based on the initial assessment, create a personalized academic and career
-    development plan that aligns with the student's goals and capabilities.
+    Create an academic plan for the student based on their profile and goals.
+    Student ID: {student_id}
+    Year: {year}
+    Major: {major}
+    Current GPA: {gpa}
+    Input: {input}
+    
+    Consider their current academic standing, career goals, and interests.
+    Identify courses, resources, and opportunities that align with their goals.
+    Provide a detailed academic plan with short-term and long-term objectives.
   expected_output: >
-    A structured academic plan including course recommendations, study strategies,
-    project suggestions, and career development milestones.
+    A detailed academic plan including:
+    1. Course recommendations for upcoming terms
+    2. Study strategies based on learning style
+    3. Resource recommendations (tutoring, workshops, etc.)
+    4. Extracurricular activities relevant to career goals
+    5. Timeline with key milestones and checkpoints
+    6. Strategies to improve academic performance if needed
   agent: academic_advisor
-  context: [initial_assessment_task]
+  output_file: "student_reports/{student_id}/academic_plan.md"
 
-well_being_task:
+well_being_assessment:
   description: >
-    Analyze the student's emotional well-being and mental health indicators from
-    their interactions and responses. Identify any patterns requiring attention.
+    Assess the student's emotional and psychological well-being based on their interactions.
+    Student ID: {student_id}
+    Year: {year}
+    Major: {major}
+    Current GPA: {gpa}
+    Input: {input}
+    
+    Analyze their emotional tone, identify any signs of distress or anxiety,
+    and evaluate their overall well-being and stress management.
+    Provide appropriate support, resources, and coping strategies.
   expected_output: >
-    A well-being assessment report with emotional analysis, stress evaluation,
-    and specific recommendations for support.
+    A well-being assessment report including:
+    1. Emotional state analysis
+    2. Identified stressors and challenges
+    3. Coping strategy recommendations
+    4. Campus resources for support
+    5. Follow-up plan if needed
+    6. Safety assessment (if applicable)
   agent: counselor
-  context: [initial_assessment_task]
-  human_input: true
+  output_file: "student_reports/{student_id}/wellbeing_assessment.md"
 
-progress_monitoring_task:
+progress_monitoring:
   description: >
-    Track and analyze the student's progress in academic performance, skill
-    development, and emotional well-being against established goals.
+    Review the student's progress since the last interaction and update their support plan.
+    Student ID: {student_id}
+    Year: {year}
+    Major: {major}
+    Current GPA: {gpa}
+    Previous Reports: {previous_reports}
+    Input: {input}
+    
+    Compare current status with previous assessments, identify improvements or new challenges,
+    and adjust support strategies accordingly.
+    Provide an updated assessment and recommendations.
   expected_output: >
-    A comprehensive progress report with metrics, achievements, areas for
-    improvement, and recommended adjustments to existing plans.
+    A progress monitoring report including:
+    1. Comparison with previous assessments
+    2. Noted improvements or new challenges
+    3. Updated support strategies
+    4. Revised goals and timeline
+    5. Recommended next steps
   agent: mentor
-  context: [academic_planning_task, well_being_task]
+  output_file: "student_reports/{student_id}/progress_report.md"
 
-continuous_monitoring_task:
+emergency_response:
   description: >
-    Continuously monitor student progress, safety concerns, and overall well-being.
-    Compile all analyses into a final comprehensive report.
+    Respond to a student in distress or crisis. This is a high-priority assessment.
+    Student ID: {student_id}
+    Year: {year}
+    Major: {major}
+    Current GPA: {gpa}
+    Input: {input}
+    
+    Quickly assess the severity of the situation, identify immediate safety concerns,
+    and provide appropriate crisis response guidance.
+    Emphasize campus emergency resources and immediate steps for safety.
   expected_output: >
-    A detailed monitoring report including academic progress, safety status,
-    emotional well-being, and any recommendations for immediate action.
+    An emergency response report including:
+    1. Crisis severity assessment
+    2. Immediate safety recommendations
+    3. Campus emergency resources
+    4. Follow-up plan
+    5. Documentation of concerns
   agent: counselor
-  context: [initial_assessment_task, academic_planning_task, well_being_task, progress_monitoring_task]
-  async_execution: true
-  output_file: 'student_reports/monitoring_report.md'
+  output_file: "student_reports/{student_id}/emergency_response.md"

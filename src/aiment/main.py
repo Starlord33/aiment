@@ -1,66 +1,55 @@
-#!/usr/bin/env python
-import sys
-import warnings
+# src/aiment/main.py
+import os
+from .crew import Aiment
 
-from datetime import datetime
+def ensure_student_directory(student_id):
+    """Create a directory for the student if it doesn't exist"""
+    os.makedirs(f"student_reports/{student_id}", exist_ok=True)
 
-from aiment.crew import Aiment
+def run_aiment_crew(inputs):
+    """Run a specific Aiment task based on session type"""
+    # Create directories
+    os.makedirs("student_reports", exist_ok=True)
+    ensure_student_directory(inputs['student_id'])
+    
+    # Initialize Aiment
+    aiment = Aiment()
+    
+    # Map session type to task
+    session_type = inputs.get('session_type', 'initial_assessment')
+    
+    # Get the crew
+    crew = aiment.crew()
+    
+    # Get the specific task
+    if session_type == 'initial_assessment':
+        task = aiment.initial_assessment()
+    elif session_type == 'academic_planning':
+        task = aiment.academic_planning()
+    elif session_type == 'well_being_check':
+        task = aiment.well_being_assessment()
+    elif session_type == 'follow_up':
+        task = aiment.progress_monitoring()
+    elif session_type == 'emergency':
+        task = aiment.emergency_response()
+    else:
+        task = aiment.initial_assessment()
+    
+    # Execute the task with the crew
+    result = crew.execute_task(task, inputs=inputs)
+    
+    return result
 
-warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
-
-# This main file is intended to be a way for you to run your
-# crew locally, so refrain from adding unnecessary logic into this file.
-# Replace with inputs you want to test with, it will automatically
-# interpolate any tasks and agents information
-
-def run():
-    """
-    Run the crew.
-    """
+if __name__ == "__main__":
+    # Example usage
     inputs = {
-        'student_id': 'STU123',
-        'current_year': str(datetime.now().year),
-        'session_type': 'initial_assessment'  # or 'follow_up', 'emergency', etc.
+        'student_id': 'S12345',
+        'year': 'Freshman',
+        'major': 'Computer Science',
+        'gpa': '3.5',
+        'input': 'I am feeling overwhelmed with my coursework and struggling to balance academics with extracurricular activities.',
+        'session_type': 'initial_assessment'
     }
     
-    try:
-        Aiment().crew().kickoff(inputs=inputs)
-    except Exception as e:
-        raise Exception(f"An error occurred while running the crew: {e}")
-
-
-def train():
-    """
-    Train the crew for a given number of iterations.
-    """
-    inputs = {
-        "topic": "AI LLMs"
-    }
-    try:
-        Aiment().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
-
-    except Exception as e:
-        raise Exception(f"An error occurred while training the crew: {e}")
-
-def replay():
-    """
-    Replay the crew execution from a specific task.
-    """
-    try:
-        Aiment().crew().replay(task_id=sys.argv[1])
-
-    except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
-
-def test():
-    """
-    Test the crew execution and returns the results.
-    """
-    inputs = {
-        "topic": "AI LLMs"
-    }
-    try:
-        Aiment().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
-
-    except Exception as e:
-        raise Exception(f"An error occurred while testing the crew: {e}")
+    result = run_aiment_crew(inputs)
+    print(result)
